@@ -1,12 +1,5 @@
 // @TODO: YOUR CODE HERE!
 
-//x axis is poverty column
-//y axis is healthcare column
-//circle label is abbr of state
-//x ais label ( In Poverty (%))
-//y axis label (Lacks Healthcare(%))
-
-
 // The code for the chart is wrapped inside a function that
 // automatically resizes the chart
 
@@ -44,8 +37,8 @@ function makeResponsive() {
 
     const chartGroup = svg.append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-//function makeResponsive() {
-// Import Data
+
+      // Import Data
       d3.csv("assets/data/data.csv").then(function (censusData) {
 
         
@@ -66,10 +59,11 @@ function makeResponsive() {
         // ==============================
        
 
-        // xLinearScale function above csv import
+        // xLinearScale function 
         let xLinearScale = xScale(censusData, chosenXAxis, width);
 
        
+        // yLinearScale function 
         let yLinearScale = yScale(censusData, chosenYAxis, height);
 
         // Step 3: Create axis functions
@@ -86,18 +80,20 @@ function makeResponsive() {
         let yAxis = chartGroup.append("g")
           .call(leftAxis);
 
-
+        // append circles group to data points
         let circlesGroup = chartGroup.selectAll("g circle")
         .data(censusData)
         .enter()
         .append("g");
-
+        
+         // append initial circles
         let circlesList = circlesGroup.append("circle")
         .attr("cx", d => xLinearScale(d[chosenXAxis]))
         .attr("cy", d => yLinearScale(d[chosenYAxis]))
         .attr("r", 10)
         .classed("stateCircle", true);
 
+         // append initial text inside circles
         let stateTextCircles = circlesGroup.append("text")
           .text(d => d.abbr)
           .attr("dx",  d => xLinearScale(d[chosenXAxis]))
@@ -189,7 +185,7 @@ function makeResponsive() {
             circlesList = renderCircles(circlesList, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
             // updates tooltips with new info
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis,circlesGroup);
-
+            // updates text inside circles with new info
             stateTextCircles = renderCirclesText(stateTextCircles, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
             // changes classes to change bold text
             if (chosenXAxis === "age") {
@@ -270,7 +266,7 @@ function makeResponsive() {
             // updates tooltips with new info
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis,circlesGroup);
 
-            // updates circles with new x values
+            // updates text inside circles with new x values
             stateTextCircles = renderCirclesText(stateTextCircles, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
             
             // changes classes to change bold text

@@ -1,9 +1,9 @@
 
-// Initial Params
+// Initialize Params
 let chosenXAxis = "poverty";
 let chosenYAxis = "healthcare";
 
-// function used for updating x-scale var upon click on axis label
+// function used for updating x-scale variable upon click on axis label
 function xScale(censusData, chosenXAxis, width) {
   // create scales
   const xLinearScale = d3.scaleLinear()
@@ -15,7 +15,7 @@ function xScale(censusData, chosenXAxis, width) {
   return xLinearScale;
 
 }
-// function used for updating y-scale var upon click on axis label
+// function used for updating y-scale variable upon click on axis label
 function yScale(censusData, chosenYAxis, height) {
     // create scales
     const yLinearScale = d3.scaleLinear()
@@ -28,7 +28,7 @@ function yScale(censusData, chosenYAxis, height) {
   
   }
 
-// function used for updating xAxis var upon click on axis label
+// function used for updating xAxis variable upon click on axis label
 function renderXAxis(newXScale, xAxis) {
   const bottomAxis = d3.axisBottom(newXScale);
 
@@ -40,7 +40,7 @@ function renderXAxis(newXScale, xAxis) {
 }
 
 
-// function used for updating yAxis var upon click on axis label
+// function used for updating yAxis variable upon click on axis label
 function renderYAxis(newYScale, yAxis) {
     const leftAxis = d3.axisLeft(newYScale);
   
@@ -64,6 +64,8 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
   return circlesGroup;
 }
 
+// function used for updating circles text group with a transition to
+// new circles
 function renderCirclesText(circlesText, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesText.transition()
@@ -112,6 +114,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
     .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function (d) {
+      //Adding tooltip for each state based on X and Y axis selected
       return (`${d.state}<br>${labelX} ${d[chosenXAxis]} ${percent} <br> ${labelY} ${d[chosenYAxis]}%`);
     });
 
