@@ -10,31 +10,42 @@
 // The code for the chart is wrapped inside a function that
 // automatically resizes the chart
 
+function makeResponsive() {
 
+    // if the SVG area isn't empty when the browser loads,
+    // remove it and replace it with a resized version of the chart
+    const svgArea = d3.select("body").select("svg");
 
-const svgWidth = 960;
-const svgHeight = 500;
+    // clear svg is not empty
+    if (!svgArea.empty()) {
+      svgArea.remove();
+    }
 
-const margin = {
-  top: 20,
-  right: 40,
-  bottom: 100,
-  left: 80
-};
+    // SVG wrapper dimensions are determined by the current width and
+    // height of the browser window.
+    const svgWidth = window.innerWidth ;
+    const svgHeight = window.innerHeight ;
 
-const width = svgWidth - margin.left - margin.right;
-const height = svgHeight - margin.top - margin.bottom;
+    const margin = {
+      top: 20,
+      right: 40,
+      bottom: 100,
+      left: 80
+    };
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-const svg = d3.select("#scatter")
-  .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
+    const width = svgWidth - margin.left - margin.right;
+    const height = svgHeight - margin.top - margin.bottom;
 
-const chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+    const svg = d3.select("#scatter")
+      .append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
 
-  // Import Data
+    const chartGroup = svg.append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+//function makeResponsive() {
+// Import Data
       d3.csv("assets/data/data.csv").then(function (censusData) {
 
         
@@ -56,10 +67,10 @@ const chartGroup = svg.append("g")
        
 
         // xLinearScale function above csv import
-         let xLinearScale = xScale(censusData, chosenXAxis);
+        let xLinearScale = xScale(censusData, chosenXAxis, width);
 
        
-        let yLinearScale = yScale(censusData, chosenYAxis);
+        let yLinearScale = yScale(censusData, chosenYAxis, height);
 
         // Step 3: Create axis functions
         // ==============================
@@ -84,7 +95,7 @@ const chartGroup = svg.append("g")
         let circlesList = circlesGroup.append("circle")
         .attr("cx", d => xLinearScale(d[chosenXAxis]))
         .attr("cy", d => yLinearScale(d[chosenYAxis]))
-        .attr("r", 8)
+        .attr("r", 10)
         .classed("stateCircle", true);
 
         let stateTextCircles = circlesGroup.append("text")
@@ -169,7 +180,7 @@ const chartGroup = svg.append("g")
 
             // functions here found above csv import
             // updates x scale for new data
-            xLinearScale = xScale(censusData, chosenXAxis);
+            xLinearScale = xScale(censusData, chosenXAxis, width);
 
             // updates x axis with transition
             xAxis = renderXAxis(xLinearScale, xAxis);
@@ -247,7 +258,7 @@ const chartGroup = svg.append("g")
 
             // functions here found above csv import
             // updates x scale for new data
-            yLinearScale = yScale(censusData, chosenYAxis);
+            yLinearScale = yScale(censusData, chosenYAxis, height);
 
             // updates x axis with transition
             yAxis = renderYAxis(yLinearScale, yAxis);
@@ -319,3 +330,10 @@ const chartGroup = svg.append("g")
       });
 
 
+}
+
+// When the browser loads, makeResponsive() is called.
+makeResponsive();
+
+// When the browser window is resized, makeResponsive() is called.
+d3.select(window).on("resize", makeResponsive);

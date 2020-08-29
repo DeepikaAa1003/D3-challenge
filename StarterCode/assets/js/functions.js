@@ -4,7 +4,7 @@ let chosenXAxis = "poverty";
 let chosenYAxis = "healthcare";
 
 // function used for updating x-scale var upon click on axis label
-function xScale(censusData, chosenXAxis) {
+function xScale(censusData, chosenXAxis, width) {
   // create scales
   const xLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenXAxis]) * 0.9,
@@ -16,7 +16,7 @@ function xScale(censusData, chosenXAxis) {
 
 }
 // function used for updating y-scale var upon click on axis label
-function yScale(censusData, chosenYAxis) {
+function yScale(censusData, chosenYAxis, height) {
     // create scales
     const yLinearScale = d3.scaleLinear()
       .domain([d3.min(censusData, d => d[chosenYAxis]) - 2,
@@ -115,7 +115,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
       return (`${d.state}<br>${labelX} ${d[chosenXAxis]} ${percent} <br> ${labelY} ${d[chosenYAxis]}%`);
     });
 
-  chartGroup.call(toolTip);
+  circlesGroup.call(toolTip);
 
   circlesGroup.on("mouseover", function (data) {
     toolTip.show(data);
